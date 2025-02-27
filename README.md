@@ -5,7 +5,7 @@ todo:
 - [x] Normalize RGB
 - [x] RGB to HSV
 - [x] HSV to RGB
-- [ ] RGB to CMYK
+- [x] RGB to CMYK
 - [ ] CMYK to RGB
 - [ ] RGB to Grey Scale
 - [ ] Add UI
