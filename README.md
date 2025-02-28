@@ -6,7 +6,7 @@ todo:
 - [x] RGB to HSV
 - [x] HSV to RGB
 - [x] RGB to CMYK
-- [ ] CMYK to RGB
-- [ ] RGB to Grey Scale
+- [x] CMYK to RGB
+- [x] RGB to Grey Scale
 - [ ] Add UI
 - [ ] Add Data process
