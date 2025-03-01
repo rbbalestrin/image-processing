@@ -14,7 +14,7 @@ export function RGBtoHSV(
 
 	let h = 0;
 
-	if (delta !== 0) u{
+	if (delta !== 0) {
 		if (cmax === rPrime) {
 			h = 60 * (((gPrime - bPrime) / delta) % 6);
 		} else if (cmax === gPrime) {
