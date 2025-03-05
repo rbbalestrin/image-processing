@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { normalizeRGB } from "./utils/normalize";
 import { RGBtoHSV } from "./utils/rbgtohsv";
 import { HSVtoRGB } from "./utils/hsvtorgb";
@@ -31,7 +31,7 @@ function App() {
 	const [hsv, setHsv] = useState<HSV>({ h: 0, s: 0, v: 0 });
 	const [cmyk, setCmyk] = useState<CMYK>({ c: 0, m: 0, y: 0, k: 0 });
 	const [grayscale, setGrayscale] = useState<number>(76);
-	const [normalizedRgb, setNormalizedRgb] = useState({ r: 1, g: 0, b: 0 });
+	const [, setNormalizedRgb] = useState({ r: 1, g: 0, b: 0 });
 	const [activeTab, setActiveTab] = useState<
 		"rgb" | "hsv" | "cmyk" | "grayscale"
 	>("rgb");
