@@ -96,6 +96,10 @@ function ColorConversion() {
 						</Button>
 						<CardTitle>Conversão de Cores</CardTitle>
 					</div>
+					<p className="text-s text-muted-foreground">
+						Converta cores RGB, HSV, CMYK e escala de cinza. Cuidado com bugs ao
+						converter em CMYK, por ser em porcentagem.
+					</p>
 				</CardHeader>
 				<CardContent>
 					{/* Preview de cor */}

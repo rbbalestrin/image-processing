@@ -81,6 +81,10 @@ const BrightnessAdjustment = () => {
 						</Button>
 						<CardTitle>Ajuste de Brilho (Escala de Cinza)</CardTitle>
 					</div>
+					<p className="text-s text-muted-foreground">
+						A imagem será convertida para escala de cinza antes de ser
+						processada
+					</p>
 				</CardHeader>
 				<CardContent>
 					{/* Upload Area */}

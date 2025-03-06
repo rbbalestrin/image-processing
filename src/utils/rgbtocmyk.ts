@@ -18,10 +18,11 @@ export function RGBtoCMYK(r: number, g: number, b: number) {
 	const y = ((1 - bNorm - k) / (1 - k)) * 100;
 	const kPercent = k * 100;
 
+	// Ensure values are within valid range and round to 2 decimal places
 	return {
-		c: Math.round(c),
-		m: Math.round(m),
-		y: Math.round(y),
-		k: Math.round(kPercent),
+		c: Math.max(0, Math.min(100, Math.round(c * 100) / 100)),
+		m: Math.max(0, Math.min(100, Math.round(m * 100) / 100)),
+		y: Math.max(0, Math.min(100, Math.round(y * 100) / 100)),
+		k: Math.max(0, Math.min(100, Math.round(kPercent * 100) / 100)),
 	};
 }
