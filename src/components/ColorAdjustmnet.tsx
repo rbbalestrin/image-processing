@@ -7,6 +7,11 @@ import { CMYKtoRGB } from "../utils/cmyktorgb";
 import { RGBtoGrayscale } from "../utils/rgbtograyscale";
 import { Sliders, RefreshCw, Droplet, Palette, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface RGB {
 	r: number;
@@ -80,18 +85,19 @@ function ColorConversion() {
 	};
 
 	return (
-		<div className="min-h-screen bg-gray-100 flex flex-col items-center py-8">
-			<div className="w-full max-w-3xl bg-white rounded-lg shadow-md overflow-hidden">
-				<div className="p-6">
-					<div className="flex items-center mb-6">
-						<Link to="/" className="text-gray-600 hover:text-gray-800 mr-4">
-							<ArrowLeft className="w-6 h-6" />
-						</Link>
-						<h1 className="text-2xl font-bold text-gray-800">
-							Conversão de Cores
-						</h1>
+		<div className="min-h-screen bg-background p-8">
+			<Card className="max-w-3xl mx-auto">
+				<CardHeader>
+					<div className="flex items-center space-x-4">
+						<Button variant="ghost" asChild>
+							<Link to="/">
+								<ArrowLeft className="h-4 w-4" />
+							</Link>
+						</Button>
+						<CardTitle>Conversão de Cores</CardTitle>
 					</div>
-
+				</CardHeader>
+				<CardContent>
 					{/* Preview de cor */}
 					<div className="mb-6 flex items-center">
 						<div
@@ -99,296 +105,212 @@ function ColorConversion() {
 							style={{ backgroundColor: `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})` }}
 						></div>
 						<div className="flex-1">
-							<h2 className="text-lg font-semibold text-gray-700">Cor Atual</h2>
-							<p className="text-gray-600">
+							<h2 className="text-lg font-semibold text-foreground">
+								Cor Atual
+							</h2>
+							<p className="text-muted-foreground">
 								RGB: {rgb.r}, {rgb.g}, {rgb.b}
 							</p>
-							<p className="text-gray-600">
+							<p className="text-muted-foreground">
 								HSV: {hsv.h?.toFixed(0) ?? 0}°, {hsv.s?.toFixed(0) ?? 0}%,{" "}
 								{hsv.v?.toFixed(0) ?? 0}%
 							</p>
-							<p className="text-gray-600">
+							<p className="text-muted-foreground">
 								CMYK: {cmyk.c?.toFixed(0) ?? 0}%, {cmyk.m?.toFixed(0) ?? 0}%,{" "}
 								{cmyk.y?.toFixed(0) ?? 0}%, {cmyk.k?.toFixed(0) ?? 0}%
 							</p>
-							<p className="text-gray-600">Escala de Cinza: {grayscale}%</p>
+							<p className="text-muted-foreground">
+								Escala de Cinza: {grayscale}%
+							</p>
 						</div>
 					</div>
 
-					{/* Tabs */}
-					<div className="flex border-b mb-4">
-						<button
-							className={`px-4 py-2 flex items-center ${
-								activeTab === "rgb"
-									? "border-b-2 border-blue-500 text-blue-600"
-									: "text-gray-600"
-							}`}
-							onClick={() => setActiveTab("rgb")}
-						>
-							<Palette className="w-4 h-4 mr-1" /> RGB
-						</button>
-						<button
-							className={`px-4 py-2 flex items-center ${
-								activeTab === "hsv"
-									? "border-b-2 border-blue-500 text-blue-600"
-									: "text-gray-600"
-							}`}
-							onClick={() => setActiveTab("hsv")}
-						>
-							<Sliders className="w-4 h-4 mr-1" /> HSV
-						</button>
-						<button
-							className={`px-4 py-2 flex items-center ${
-								activeTab === "cmyk"
-									? "border-b-2 border-blue-500 text-blue-600"
-									: "text-gray-600"
-							}`}
-							onClick={() => setActiveTab("cmyk")}
-						>
-							<Droplet className="w-4 h-4 mr-1" /> CMYK
-						</button>
-						<button
-							className={`px-4 py-2 flex items-center ${
-								activeTab === "grayscale"
-									? "border-b-2 border-blue-500 text-blue-600"
-									: "text-gray-600"
-							}`}
-							onClick={() => setActiveTab("grayscale")}
-						>
-							<RefreshCw className="w-4 h-4 mr-1" /> Escala de Cinza
-						</button>
-					</div>
+					<Tabs
+						value={activeTab}
+						onValueChange={(value) => setActiveTab(value as any)}
+					>
+						<TabsList className="grid w-full grid-cols-4">
+							<TabsTrigger value="rgb" className="flex items-center">
+								<Palette className="w-4 h-4 mr-1" /> RGB
+							</TabsTrigger>
+							<TabsTrigger value="hsv" className="flex items-center">
+								<Sliders className="w-4 h-4 mr-1" /> HSV
+							</TabsTrigger>
+							<TabsTrigger value="cmyk" className="flex items-center">
+								<Droplet className="w-4 h-4 mr-1" /> CMYK
+							</TabsTrigger>
+							<TabsTrigger value="grayscale" className="flex items-center">
+								<RefreshCw className="w-4 h-4 mr-1" /> Escala de Cinza
+							</TabsTrigger>
+						</TabsList>
 
-					{/* RGB Controles */}
-					{activeTab === "rgb" && (
-						<div className="space-y-4">
-							<h3 className="text-lg font-semibold text-gray-700">
+						<TabsContent value="rgb" className="space-y-4">
+							<h3 className="text-lg font-semibold text-foreground">
 								Valores RGB
 							</h3>
 							<div className="space-y-3">
 								<div>
-									<label className="block text-sm font-medium text-gray-700 mb-1">
-										Vermelho ({rgb.r})
-									</label>
-									<input
-										type="range"
-										min="0"
-										max="255"
-										value={rgb.r}
-										onChange={(e) =>
-											handleRgbChange("r", parseInt(e.target.value))
-										}
-										className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+									<Label>Vermelho ({rgb.r})</Label>
+									<Slider
+										value={[rgb.r]}
+										min={0}
+										max={255}
+										step={1}
+										onValueChange={([value]) => handleRgbChange("r", value)}
+										className="w-full"
 									/>
 								</div>
 								<div>
-									<label className="block text-sm font-medium text-gray-700 mb-1">
-										Verde ({rgb.g})
-									</label>
-									<input
-										type="range"
-										min="0"
-										max="255"
-										value={rgb.g}
-										onChange={(e) =>
-											handleRgbChange("g", parseInt(e.target.value))
-										}
-										className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+									<Label>Verde ({rgb.g})</Label>
+									<Slider
+										value={[rgb.g]}
+										min={0}
+										max={255}
+										step={1}
+										onValueChange={([value]) => handleRgbChange("g", value)}
+										className="w-full"
 									/>
 								</div>
 								<div>
-									<label className="block text-sm font-medium text-gray-700 mb-1">
-										Azul ({rgb.b})
-									</label>
-									<input
-										type="range"
-										min="0"
-										max="255"
-										value={rgb.b}
-										onChange={(e) =>
-											handleRgbChange("b", parseInt(e.target.value))
-										}
-										className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+									<Label>Azul ({rgb.b})</Label>
+									<Slider
+										value={[rgb.b]}
+										min={0}
+										max={255}
+										step={1}
+										onValueChange={([value]) => handleRgbChange("b", value)}
+										className="w-full"
 									/>
 								</div>
 							</div>
+						</TabsContent>
 
-							<div className="mt-4 p-4 bg-gray-50 rounded-md">
-								<h4 className="text-sm font-semibold text-gray-700 mb-2">
-									RGB Normalizado (0-1)
-								</h4>
-								<p className="text-gray-600">
-									HSV: {(hsv.h ?? 0).toFixed(0)}°, {(hsv.s ?? 0).toFixed(0)}%,{" "}
-									{(hsv.v ?? 0).toFixed(0)}%
-								</p>
-								<p className="text-gray-600">
-									CMYK: {(cmyk.c ?? 0).toFixed(0)}%, {(cmyk.m ?? 0).toFixed(0)}
-									%, {(cmyk.y ?? 0).toFixed(0)}%, {(cmyk.k ?? 0).toFixed(0)}%
-								</p>
-							</div>
-						</div>
-					)}
-
-					{/* HSV Controles */}
-					{activeTab === "hsv" && (
-						<div className="space-y-4">
-							<h3 className="text-lg font-semibold text-gray-700">
+						<TabsContent value="hsv" className="space-y-4">
+							<h3 className="text-lg font-semibold text-foreground">
 								Valores HSV
 							</h3>
 							<div className="space-y-3">
 								<div>
-									<label className="block text-sm font-medium text-gray-700 mb-1">
-										Matiz ({hsv.h.toFixed(0)}°)
-									</label>
-									<input
-										type="range"
-										min="0"
-										max="359"
-										value={hsv.h}
-										onChange={(e) =>
-											handleHsvInputChange("h", parseInt(e.target.value))
+									<Label>Matiz ({hsv.h.toFixed(0)}°)</Label>
+									<Slider
+										value={[hsv.h]}
+										min={0}
+										max={359}
+										step={1}
+										onValueChange={([value]) =>
+											handleHsvInputChange("h", value)
 										}
-										className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+										className="w-full"
 									/>
 								</div>
 								<div>
-									<label className="block text-sm font-medium text-gray-700 mb-1">
-										Saturação ({hsv.s.toFixed(0)}%)
-									</label>
-									<input
-										type="range"
-										min="0"
-										max="100"
-										value={hsv.s}
-										onChange={(e) =>
-											handleHsvInputChange("s", parseInt(e.target.value))
+									<Label>Saturação ({hsv.s.toFixed(0)}%)</Label>
+									<Slider
+										value={[hsv.s]}
+										min={0}
+										max={100}
+										step={1}
+										onValueChange={([value]) =>
+											handleHsvInputChange("s", value)
 										}
-										className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+										className="w-full"
 									/>
 								</div>
 								<div>
-									<label className="block text-sm font-medium text-gray-700 mb-1">
-										Valor ({hsv.v.toFixed(0)}%)
-									</label>
-									<input
-										type="range"
-										min="0"
-										max="100"
-										value={hsv.v}
-										onChange={(e) =>
-											handleHsvInputChange("v", parseInt(e.target.value))
+									<Label>Valor ({hsv.v.toFixed(0)}%)</Label>
+									<Slider
+										value={[hsv.v]}
+										min={0}
+										max={100}
+										step={1}
+										onValueChange={([value]) =>
+											handleHsvInputChange("v", value)
 										}
-										className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+										className="w-full"
 									/>
 								</div>
 							</div>
-						</div>
-					)}
+						</TabsContent>
 
-					{/* CMYK Controles */}
-					{activeTab === "cmyk" && (
-						<div className="space-y-4">
-							<h3 className="text-lg font-semibold text-gray-700">
+						<TabsContent value="cmyk" className="space-y-4">
+							<h3 className="text-lg font-semibold text-foreground">
 								Valores CMYK
 							</h3>
 							<div className="space-y-3">
 								<div>
-									<label className="block text-sm font-medium text-gray-700 mb-1">
-										Ciano ({cmyk.c.toFixed(0)}%)
-									</label>
-									<input
-										type="range"
-										min="0"
-										max="100"
-										value={cmyk.c}
-										onChange={(e) =>
-											handleCmykInputChange("c", parseInt(e.target.value))
+									<Label>Ciano ({cmyk.c.toFixed(0)}%)</Label>
+									<Slider
+										value={[cmyk.c]}
+										min={0}
+										max={100}
+										step={1}
+										onValueChange={([value]) =>
+											handleCmykInputChange("c", value)
 										}
-										className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+										className="w-full"
 									/>
 								</div>
 								<div>
-									<label className="block text-sm font-medium text-gray-700 mb-1">
-										Magenta ({cmyk.m.toFixed(0)}%)
-									</label>
-									<input
-										type="range"
-										min="0"
-										max="100"
-										value={cmyk.m}
-										onChange={(e) =>
-											handleCmykInputChange("m", parseInt(e.target.value))
+									<Label>Magenta ({cmyk.m.toFixed(0)}%)</Label>
+									<Slider
+										value={[cmyk.m]}
+										min={0}
+										max={100}
+										step={1}
+										onValueChange={([value]) =>
+											handleCmykInputChange("m", value)
 										}
-										className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+										className="w-full"
 									/>
 								</div>
 								<div>
-									<label className="block text-sm font-medium text-gray-700 mb-1">
-										Amarelo ({cmyk.y.toFixed(0)}%)
-									</label>
-									<input
-										type="range"
-										min="0"
-										max="100"
-										value={cmyk.y}
-										onChange={(e) =>
-											handleCmykInputChange("y", parseInt(e.target.value))
+									<Label>Amarelo ({cmyk.y.toFixed(0)}%)</Label>
+									<Slider
+										value={[cmyk.y]}
+										min={0}
+										max={100}
+										step={1}
+										onValueChange={([value]) =>
+											handleCmykInputChange("y", value)
 										}
-										className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+										className="w-full"
 									/>
 								</div>
 								<div>
-									<label className="block text-sm font-medium text-gray-700 mb-1">
-										Preto ({cmyk.k.toFixed(0)}%)
-									</label>
-									<input
-										type="range"
-										min="0"
-										max="100"
-										value={cmyk.k}
-										onChange={(e) =>
-											handleCmykInputChange("k", parseInt(e.target.value))
+									<Label>Preto ({cmyk.k.toFixed(0)}%)</Label>
+									<Slider
+										value={[cmyk.k]}
+										min={0}
+										max={100}
+										step={1}
+										onValueChange={([value]) =>
+											handleCmykInputChange("k", value)
 										}
-										className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+										className="w-full"
 									/>
 								</div>
 							</div>
-						</div>
-					)}
+						</TabsContent>
 
-					{/* Escala de Cinza Controles */}
-					{activeTab === "grayscale" && (
-						<div className="space-y-4">
-							<h3 className="text-lg font-semibold text-gray-700">
+						<TabsContent value="grayscale" className="space-y-4">
+							<h3 className="text-lg font-semibold text-foreground">
 								Valor de Escala de Cinza
 							</h3>
 							<div>
-								<label className="block text-sm font-medium text-gray-700 mb-1">
-									Escala de Cinza ({grayscale})
-								</label>
-								<input
-									type="range"
-									min="0"
-									max="255"
-									value={grayscale}
-									onChange={(e) =>
-										handleGrayscaleChange(parseInt(e.target.value))
-									}
-									className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+								<Label>Escala de Cinza ({grayscale})</Label>
+								<Slider
+									value={[grayscale]}
+									min={0}
+									max={255}
+									step={1}
+									onValueChange={([value]) => handleGrayscaleChange(value)}
+									className="w-full"
 								/>
 							</div>
-							<div className="mt-4 p-4 bg-gray-50 rounded-md">
-								<h4 className="text-sm font-semibold text-gray-700 mb-2">
-									Equivalente RGB
-								</h4>
-								<p className="text-gray-600">
-									R: {grayscale}, G: {grayscale}, B: {grayscale}
-								</p>
-							</div>
-						</div>
-					)}
-				</div>
-			</div>
+						</TabsContent>
+					</Tabs>
+				</CardContent>
+			</Card>
 		</div>
 	);
 }

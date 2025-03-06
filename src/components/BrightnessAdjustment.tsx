@@ -5,6 +5,10 @@ import {
 	adjustImageBrightness,
 } from "../utils/imageProcessing";
 import { Sun, ArrowLeft, Upload, RefreshCw } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
+import { Label } from "@/components/ui/label";
 
 const BrightnessAdjustment = () => {
 	const [brightness, setBrightness] = useState<number>(0);
@@ -66,105 +70,99 @@ const BrightnessAdjustment = () => {
 	}, [originalImageData, adjustedImageData]);
 
 	return (
-		<div className="min-h-screen bg-gray-100 flex flex-col items-center py-8">
-			<div className="w-full max-w-3xl bg-white rounded-lg shadow-md overflow-hidden">
-				<div className="p-6">
-					<div className="flex items-center mb-6">
-						<Link to="/" className="text-gray-600 hover:text-gray-800 mr-4">
-							<ArrowLeft className="w-6 h-6" />
-						</Link>
-						<h1 className="text-2xl font-bold text-gray-800">
-							Ajuste de Brilho (Escala de Cinza)
-						</h1>
+		<div className="min-h-screen bg-background p-8">
+			<Card className="max-w-3xl mx-auto">
+				<CardHeader>
+					<div className="flex items-center space-x-4">
+						<Button variant="ghost" asChild>
+							<Link to="/">
+								<ArrowLeft className="h-4 w-4" />
+							</Link>
+						</Button>
+						<CardTitle>Ajuste de Brilho (Escala de Cinza)</CardTitle>
 					</div>
-
-					{/* Image Upload */}
+				</CardHeader>
+				<CardContent>
+					{/* Upload Area */}
 					<div className="mb-8">
-						<label className="block mb-4">
-							<div className="flex items-center justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
-								<div className="flex flex-col items-center space-y-2">
-									<Upload className="w-8 h-8 text-gray-400" />
-									<span className="font-medium text-gray-600">
-										Clique para selecionar uma imagem
-									</span>
-									<span className="text-sm text-gray-500">
-										PNG, JPG, GIF até 10MB
-									</span>
-								</div>
-								<input
-									type="file"
-									className="hidden"
-									accept="image/*"
-									onChange={handleFileUpload}
-									disabled={isProcessing}
-								/>
+						<Label htmlFor="image-upload" className="block mb-4">
+							<div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-8 text-center hover:border-muted-foreground/50 transition-colors cursor-pointer">
+								<Upload className="w-8 h-8 mx-auto mb-4 text-muted-foreground" />
+								<p className="text-sm font-medium">
+									Clique para selecionar uma imagem
+								</p>
+								<p className="text-xs text-muted-foreground mt-1">
+									PNG, JPG, GIF até 10MB
+								</p>
 							</div>
-						</label>
+							<input
+								id="image-upload"
+								type="file"
+								className="hidden"
+								accept="image/*"
+								onChange={handleFileUpload}
+								disabled={isProcessing}
+							/>
+						</Label>
 					</div>
 
 					{isProcessing && (
 						<div className="flex items-center justify-center space-x-2 mb-8">
-							<RefreshCw className="w-5 h-5 animate-spin text-blue-500" />
-							<span className="text-gray-600">Processando imagem...</span>
+							<RefreshCw className="w-5 h-5 animate-spin text-primary" />
+							<span className="text-muted-foreground">
+								Processando imagem...
+							</span>
 						</div>
 					)}
 
-					{/* Preview Section */}
 					{originalImageData && (
-						<div className="mb-8 space-y-4">
+						<div className="space-y-6">
 							<div className="grid grid-cols-2 gap-4">
-								<div className="space-y-2">
-									<h3 className="text-sm font-medium text-gray-700">
-										Imagem Original (Escala de Cinza)
-									</h3>
-									<div className="relative w-full aspect-video bg-gray-100 rounded-lg overflow-hidden">
+								<div>
+									<h3 className="text-sm font-medium mb-2">Imagem Original</h3>
+									<div className="aspect-video bg-muted rounded-lg overflow-hidden">
 										<canvas
 											ref={originalCanvasRef}
-											className="absolute inset-0 w-full h-full object-contain"
+											className="w-full h-full object-contain"
 										/>
 									</div>
 								</div>
-								<div className="space-y-2">
-									<h3 className="text-sm font-medium text-gray-700">
-										Imagem Ajustada
-									</h3>
-									<div className="relative w-full aspect-video bg-gray-100 rounded-lg overflow-hidden">
+								<div>
+									<h3 className="text-sm font-medium mb-2">Imagem Ajustada</h3>
+									<div className="aspect-video bg-muted rounded-lg overflow-hidden">
 										<canvas
 											ref={adjustedCanvasRef}
-											className="absolute inset-0 w-full h-full object-contain"
+											className="w-full h-full object-contain"
 										/>
 									</div>
 								</div>
 							</div>
 
-							{/* Brightness Control */}
-							<div>
-								<label className="text-sm font-medium text-gray-700 mb-2 flex items-center">
-									<Sun className="w-4 h-4 mr-2" />
-									Ajuste de Brilho
-								</label>
-								<input
-									type="range"
-									min="-255"
-									max="255"
-									value={brightness}
-									onChange={(e) =>
-										handleBrightnessChange(parseInt(e.target.value))
-									}
-									className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+							<div className="space-y-4">
+								<div className="flex items-center space-x-2">
+									<Sun className="w-4 h-4" />
+									<Label>Ajuste de Brilho</Label>
+								</div>
+								<Slider
+									value={[brightness]}
+									min={-255}
+									max={255}
+									step={1}
+									onValueChange={([value]) => handleBrightnessChange(value)}
+									className="w-full"
 								/>
-								<div className="mt-1 flex justify-between text-xs text-gray-500">
+								<div className="flex justify-between text-xs text-muted-foreground">
 									<span>-255</span>
 									<span>+255</span>
 								</div>
-								<p className="mt-1 text-sm text-gray-600 text-center">
+								<p className="text-sm text-center text-muted-foreground">
 									Ajuste: {brightness > 0 ? `+${brightness}` : brightness}
 								</p>
 							</div>
 						</div>
 					)}
-				</div>
-			</div>
+				</CardContent>
+			</Card>
 		</div>
 	);
 };
