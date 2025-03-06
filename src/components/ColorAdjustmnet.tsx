@@ -5,7 +5,8 @@ import { HSVtoRGB } from "../utils/hsvtorgb";
 import { RGBtoCMYK } from "../utils/rgbtocmyk";
 import { CMYKtoRGB } from "../utils/cmyktorgb";
 import { RGBtoGrayscale } from "../utils/rgbtograyscale";
-import { Sliders, RefreshCw, Droplet, Palette } from "lucide-react";
+import { Sliders, RefreshCw, Droplet, Palette, ArrowLeft } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface RGB {
 	r: number;
@@ -82,9 +83,14 @@ function ColorConversion() {
 		<div className="min-h-screen bg-gray-100 flex flex-col items-center py-8">
 			<div className="w-full max-w-3xl bg-white rounded-lg shadow-md overflow-hidden">
 				<div className="p-6">
-					<h1 className="text-2xl font-bold text-gray-800 mb-4">
-						Processamento de Imagem
-					</h1>
+					<div className="flex items-center mb-6">
+						<Link to="/" className="text-gray-600 hover:text-gray-800 mr-4">
+							<ArrowLeft className="w-6 h-6" />
+						</Link>
+						<h1 className="text-2xl font-bold text-gray-800">
+							Conversão de Cores
+						</h1>
+					</div>
 
 					{/* Preview de cor */}
 					<div className="mb-6 flex items-center">
