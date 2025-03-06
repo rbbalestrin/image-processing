@@ -1,3 +1,5 @@
+import { adjustBrightness } from "./brightness";
+
 export function convertToGrayscale(imageFile: File): Promise<ImageData> {
 	return new Promise((resolve, reject) => {
 		const img = new Image();
@@ -13,19 +15,19 @@ export function convertToGrayscale(imageFile: File): Promise<ImageData> {
 			canvas.width = img.width;
 			canvas.height = img.height;
 
-			// Draw the original image
+			// Desenha a imagem original
 			ctx.drawImage(img, 0, 0);
 
-			// Get image data
+			// Obtém os dados da imagem
 			const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 			const data = imageData.data;
 
-			// Convert to grayscale
+			// Converte para escala de cinza
 			for (let i = 0; i < data.length; i += 4) {
 				const r = data[i];
 				const g = data[i + 1];
 				const b = data[i + 2];
-				// Using luminance formula
+				// Usando fórmula de luminância
 				const gray = Math.round(0.299 * r + 0.587 * g + 0.114 * b);
 				data[i] = gray; // R
 				data[i + 1] = gray; // G
@@ -53,12 +55,13 @@ export function adjustImageBrightness(
 	imageData: ImageData,
 	adjustment: number
 ): ImageData {
-	const newData = new Uint8ClampedArray(imageData.data);
+	const data = imageData.data;
+	const newData = new Uint8ClampedArray(data);
 
-	for (let i = 0; i < newData.length; i += 4) {
-		newData[i] = Math.max(0, Math.min(255, newData[i] + adjustment)); // R
-		newData[i + 1] = Math.max(0, Math.min(255, newData[i + 1] + adjustment)); // G
-		newData[i + 2] = Math.max(0, Math.min(255, newData[i + 2] + adjustment)); // B
+	for (let i = 0; i < data.length; i += 4) {
+		newData[i] = adjustBrightness(data[i], adjustment); // R
+		newData[i + 1] = adjustBrightness(data[i + 1], adjustment); // G
+		newData[i + 2] = adjustBrightness(data[i + 2], adjustment); // B
 	}
 
 	return new ImageData(newData, imageData.width, imageData.height);
