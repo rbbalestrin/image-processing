@@ -96,14 +96,14 @@ const BrightnessAdjustment = () => {
 									Clique para selecionar uma imagem
 								</p>
 								<p className="text-xs text-muted-foreground mt-1">
-									PNG, JPG, GIF até 10MB
+									PNG, JPG, GIF, TIF, TIFF até 10MB
 								</p>
 							</div>
 							<input
 								id="image-upload"
 								type="file"
 								className="hidden"
-								accept="image/*"
+								accept="image/png,image/jpeg,image/gif,image/tiff"
 								onChange={handleFileUpload}
 								disabled={isProcessing}
 							/>

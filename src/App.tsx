@@ -1,15 +1,17 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import { Sliders, Sun } from "lucide-react";
+import { Sliders, Sun, Calculator, Binary } from "lucide-react";
 import ColorAdjustment from "./components/ColorAdjustmnet";
 import BrightnessAdjustment from "./components/BrightnessAdjustment";
+import ImageArithmetic from "./components/ImageArithmetic";
+import ImageLogic from "./components/ImageLogic";
 import { Card, CardContent } from "@/components/ui/card";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 function App() {
 	return (
-		<ThemeProvider defaultTheme="system" storageKey="app-theme">
+		<ThemeProvider defaultTheme="light" storageKey="app-theme">
 			<Router>
 				<div className="min-h-screen bg-background">
 					<ThemeToggle />
@@ -56,6 +58,40 @@ function App() {
 													</CardContent>
 												</Card>
 											</Link>
+
+											<Link to="/arithmetic" className="block">
+												<Card className="h-full hover:shadow-lg transition-shadow">
+													<CardContent className="p-6">
+														<div className="flex items-center mb-4">
+															<Calculator className="w-6 h-6 text-primary mr-3" />
+															<h2 className="text-xl font-semibold text-foreground">
+																Operações Aritméticas
+															</h2>
+														</div>
+														<p className="text-muted-foreground">
+															Realize operações (adição, subtração,
+															multiplicação, divisão e blending)
+														</p>
+													</CardContent>
+												</Card>
+											</Link>
+
+											<Link to="/logic" className="block">
+												<Card className="h-full hover:shadow-lg transition-shadow">
+													<CardContent className="p-6">
+														<div className="flex items-center mb-4">
+															<Binary className="w-6 h-6 text-primary mr-3" />
+															<h2 className="text-xl font-semibold text-foreground">
+																Operações Lógicas
+															</h2>
+														</div>
+														<p className="text-muted-foreground">
+															Operações lógicas em imagens binárias (AND, OR,
+															XOR, NOT)
+														</p>
+													</CardContent>
+												</Card>
+											</Link>
 										</div>
 									</div>
 								</div>
@@ -63,6 +99,8 @@ function App() {
 						/>
 						<Route path="/converter" element={<ColorAdjustment />} />
 						<Route path="/brightness" element={<BrightnessAdjustment />} />
+						<Route path="/arithmetic" element={<ImageArithmetic />} />
+						<Route path="/logic" element={<ImageLogic />} />
 					</Routes>
 				</div>
 			</Router>
