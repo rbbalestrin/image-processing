@@ -264,40 +264,37 @@ const ImageLogic = () => {
 									id="image1-upload"
 									type="file"
 									className="hidden"
-									accept="image/png,image/jpeg,image/gif,image/tiff"
 									onChange={handleImage1Upload}
 									disabled={isProcessing}
 								/>
 							</Label>
 						</div>
 
-						{isSecondImageRequired() && (
-							<div>
-								<Label htmlFor="image2-upload" className="block mb-2">
-									<div
-										className={`border-2 border-dashed ${
-											isSecondImageRequired()
-												? "border-primary/50"
-												: "border-muted-foreground/25"
-										} rounded-lg p-6 text-center hover:border-muted-foreground/50 transition-colors cursor-pointer`}
-									>
-										<Upload className="w-6 h-6 mx-auto mb-2 text-muted-foreground" />
-										<p className="text-sm font-medium">
-											Imagem 2 {image2Name ? `(${image2Name})` : ""}
-											{isSecondImageRequired() && " (necessária)"}
-										</p>
-									</div>
-									<input
-										id="image2-upload"
-										type="file"
-										className="hidden"
-										accept="image/png,image/jpeg,image/gif,image/tiff"
-										onChange={handleImage2Upload}
-										disabled={isProcessing}
-									/>
-								</Label>
-							</div>
-						)}
+						<div>
+							<Label htmlFor="image2-upload" className="block mb-2">
+								<div
+									className={`border-2 border-dashed ${
+										isSecondImageRequired()
+											? "border-primary/50"
+											: "border-muted-foreground/25"
+									} rounded-lg p-6 text-center hover:border-muted-foreground/50 transition-colors cursor-pointer`}
+								>
+									<Upload className="w-6 h-6 mx-auto mb-2 text-muted-foreground" />
+									<p className="text-sm font-medium">
+										Imagem 2 {image2Name ? `(${image2Name})` : ""}
+										{isSecondImageRequired() && " (necessária)"}
+									</p>
+								</div>
+								<input
+									id="image2-upload"
+									type="file"
+									className="hidden"
+									accept="image/png,image/jpeg,image/gif,image/tiff"
+									onChange={handleImage2Upload}
+									disabled={isProcessing}
+								/>
+							</Label>
+						</div>
 					</div>
 
 					{isProcessing && (
