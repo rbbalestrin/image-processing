@@ -20,7 +20,7 @@ import {
 	orImages,
 	xorImages,
 	notImage,
-} from "../utils/imageBinarithcs";
+} from "../utils/logicOps";
 import { loadImageFromFile } from "../utils/imageArithmetic";
 
 type LogicOperationType = "binarize" | "and" | "or" | "xor" | "not";
