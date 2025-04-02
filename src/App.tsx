@@ -7,6 +7,8 @@ import {
 	Binary,
 	BarChart,
 	Contrast,
+	Filter,
+	Square,
 } from "lucide-react";
 import ColorAdjustment from "./components/ColorAdjustmnet";
 import BrightnessAdjustment from "./components/BrightnessAdjustment";
@@ -14,6 +16,8 @@ import ImageArithmetic from "./components/ImageArithmetic";
 import ImageLogic from "./components/ImageLogic";
 import HistogramEqualization from "./components/HistogramEqualization";
 import ImageNegative from "./components/ImageNegative";
+import SpatialFilters from "./components/SpatialFilters";
+import MorphologicalOps from "./components/MorphologicalOps";
 import { Card, CardContent } from "@/components/ui/card";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -135,6 +139,40 @@ function App() {
 													</CardContent>
 												</Card>
 											</Link>
+
+											<Link to="/filters" className="block">
+												<Card className="h-full hover:shadow-lg transition-shadow">
+													<CardContent className="p-6">
+														<div className="flex items-center mb-4">
+															<Filter className="w-6 h-6 text-primary mr-3" />
+															<h2 className="text-xl font-semibold text-foreground">
+																Filtros Espaciais
+															</h2>
+														</div>
+														<p className="text-muted-foreground">
+															Aplique filtros como média, mediana, gaussiano e
+															de ordem para suavização e redução de ruído
+														</p>
+													</CardContent>
+												</Card>
+											</Link>
+
+											<Link to="/morphology" className="block">
+												<Card className="h-full hover:shadow-lg transition-shadow">
+													<CardContent className="p-6">
+														<div className="flex items-center mb-4">
+															<Square className="w-6 h-6 text-primary mr-3" />
+															<h2 className="text-xl font-semibold text-foreground">
+																Operações Morfológicas
+															</h2>
+														</div>
+														<p className="text-muted-foreground">
+															Aplique operações como dilatação, erosão,
+															abertura, fechamento e extração de contornos
+														</p>
+													</CardContent>
+												</Card>
+											</Link>
 										</div>
 									</div>
 								</div>
@@ -146,6 +184,8 @@ function App() {
 						<Route path="/logic" element={<ImageLogic />} />
 						<Route path="/histogram" element={<HistogramEqualization />} />
 						<Route path="/negative" element={<ImageNegative />} />
+						<Route path="/filters" element={<SpatialFilters />} />
+						<Route path="/morphology" element={<MorphologicalOps />} />
 					</Routes>
 				</div>
 			</Router>
