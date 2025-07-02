@@ -188,3 +188,209 @@ export function applyOrderFilter(
 
 	return new ImageData(newData, width, height);
 }
+
+/**
+ * Converte uma imagem para escala de cinza
+ * @param imageData Dados da imagem original
+ * @returns Nova ImageData em escala de cinza
+ */
+function convertToGrayscale(imageData: ImageData): ImageData {
+	const { data, width, height } = imageData;
+	const newData = new Uint8ClampedArray(data);
+
+	for (let i = 0; i < data.length; i += 4) {
+		// Fórmula de luminância: 0.299R + 0.587G + 0.114B
+		const gray = Math.round(
+			0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2]
+		);
+		newData[i] = gray; // R
+		newData[i + 1] = gray; // G
+		newData[i + 2] = gray; // B
+		newData[i + 3] = data[i + 3]; // A
+	}
+
+	return new ImageData(newData, width, height);
+}
+
+/**
+ * Aplica convolução com um kernel específico
+ * @param imageData Dados da imagem original
+ * @param kernel Matriz do kernel de convolução
+ * @returns Nova ImageData com convolução aplicada
+ */
+function applyConvolution(imageData: ImageData, kernel: number[][]): ImageData {
+	const { data, width, height } = imageData;
+	const newData = new Uint8ClampedArray(data.length);
+	const kernelSize = kernel.length;
+	const half = Math.floor(kernelSize / 2);
+
+	for (let y = 0; y < height; y++) {
+		for (let x = 0; x < width; x++) {
+			let sum = 0;
+
+			// Aplica a convolução usando apenas o canal R (imagem em escala de cinza)
+			for (let ky = 0; ky < kernelSize; ky++) {
+				for (let kx = 0; kx < kernelSize; kx++) {
+					const nx = Math.min(Math.max(x + (kx - half), 0), width - 1);
+					const ny = Math.min(Math.max(y + (ky - half), 0), height - 1);
+					const idx = (ny * width + nx) * 4;
+					sum += data[idx] * kernel[ky][kx];
+				}
+			}
+
+			// Aplica o resultado nos três canais (R, G, B)
+			const idx = (y * width + x) * 4;
+			const value = Math.min(Math.max(Math.abs(sum), 0), 255);
+			newData[idx] = value; // R
+			newData[idx + 1] = value; // G
+			newData[idx + 2] = value; // B
+			newData[idx + 3] = 255; // A
+		}
+	}
+
+	return new ImageData(newData, width, height);
+}
+
+/**
+ * Aplica filtro Prewitt para detecção de bordas
+ * @param imageData Dados da imagem original
+ * @returns Nova ImageData com bordas detectadas
+ */
+export function applyPrewittFilter(imageData: ImageData): ImageData {
+	// Converte para escala de cinza primeiro
+	const grayImage = convertToGrayscale(imageData);
+	const { data, width, height } = grayImage;
+	const newData = new Uint8ClampedArray(data.length);
+
+	// Máscaras Prewitt
+	const kernelX = [
+		[-1, 0, 1],
+		[-1, 0, 1],
+		[-1, 0, 1],
+	];
+
+	const kernelY = [
+		[-1, -1, -1],
+		[0, 0, 0],
+		[1, 1, 1],
+	];
+
+	for (let y = 1; y < height - 1; y++) {
+		for (let x = 1; x < width - 1; x++) {
+			let gx = 0,
+				gy = 0;
+
+			// Aplica as máscaras Prewitt
+			for (let ky = 0; ky < 3; ky++) {
+				for (let kx = 0; kx < 3; kx++) {
+					const nx = x + (kx - 1);
+					const ny = y + (ky - 1);
+					const idx = (ny * width + nx) * 4;
+					const pixel = data[idx];
+
+					gx += pixel * kernelX[ky][kx];
+					gy += pixel * kernelY[ky][kx];
+				}
+			}
+
+			// Calcula a magnitude do gradiente
+			const magnitude = Math.min(Math.sqrt(gx * gx + gy * gy), 255);
+
+			// Aplica o resultado
+			const idx = (y * width + x) * 4;
+			newData[idx] = magnitude; // R
+			newData[idx + 1] = magnitude; // G
+			newData[idx + 2] = magnitude; // B
+			newData[idx + 3] = 255; // A
+		}
+	}
+
+	return new ImageData(newData, width, height);
+}
+
+/**
+ * Aplica filtro Sobel para detecção de bordas
+ * @param imageData Dados da imagem original
+ * @returns Nova ImageData com bordas detectadas
+ */
+export function applySobelFilter(imageData: ImageData): ImageData {
+	// Converte para escala de cinza primeiro
+	const grayImage = convertToGrayscale(imageData);
+	const { data, width, height } = grayImage;
+	const newData = new Uint8ClampedArray(data.length);
+
+	// Máscaras Sobel
+	const kernelX = [
+		[-1, 0, 1],
+		[-2, 0, 2],
+		[-1, 0, 1],
+	];
+
+	const kernelY = [
+		[-1, -2, -1],
+		[0, 0, 0],
+		[1, 2, 1],
+	];
+
+	for (let y = 1; y < height - 1; y++) {
+		for (let x = 1; x < width - 1; x++) {
+			let gx = 0,
+				gy = 0;
+
+			// Aplica as máscaras Sobel
+			for (let ky = 0; ky < 3; ky++) {
+				for (let kx = 0; kx < 3; kx++) {
+					const nx = x + (kx - 1);
+					const ny = y + (ky - 1);
+					const idx = (ny * width + nx) * 4;
+					const pixel = data[idx];
+
+					gx += pixel * kernelX[ky][kx];
+					gy += pixel * kernelY[ky][kx];
+				}
+			}
+
+			// Calcula a magnitude do gradiente
+			const magnitude = Math.min(Math.sqrt(gx * gx + gy * gy), 255);
+
+			// Aplica o resultado
+			const idx = (y * width + x) * 4;
+			newData[idx] = magnitude; // R
+			newData[idx + 1] = magnitude; // G
+			newData[idx + 2] = magnitude; // B
+			newData[idx + 3] = 255; // A
+		}
+	}
+
+	return new ImageData(newData, width, height);
+}
+
+/**
+ * Aplica filtro Laplaciano para detecção de bordas
+ * @param imageData Dados da imagem original
+ * @param kernelType Tipo de kernel: 'basic' ou 'diagonal'
+ * @returns Nova ImageData com bordas detectadas
+ */
+export function applyLaplacianFilter(
+	imageData: ImageData,
+	kernelType: "basic" | "diagonal" = "basic"
+): ImageData {
+	// Converte para escala de cinza primeiro
+	const grayImage = convertToGrayscale(imageData);
+
+	// Define o kernel baseado no tipo
+	const kernel =
+		kernelType === "basic"
+			? [
+					[0, -1, 0],
+					[-1, 4, -1],
+					[0, -1, 0],
+			  ]
+			: [
+					[-1, -1, -1],
+					[-1, 8, -1],
+					[-1, -1, -1],
+			  ];
+
+	return applyConvolution(grayImage, kernel);
+}

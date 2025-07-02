@@ -5,6 +5,9 @@ import {
 	applyMedianFilter,
 	applyGaussianFilter,
 	applyOrderFilter,
+	applyPrewittFilter,
+	applySobelFilter,
+	applyLaplacianFilter,
 } from "../utils/spatialFilters";
 import { ArrowLeft, Upload, RefreshCw, Filter } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,7 +16,14 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-type FilterType = "mean" | "median" | "gaussian" | "order";
+type FilterType =
+	| "mean"
+	| "median"
+	| "gaussian"
+	| "order"
+	| "prewitt"
+	| "sobel"
+	| "laplacian";
 
 const SpatialFilters = () => {
 	const [originalImageData, setOriginalImageData] = useState<ImageData | null>(
@@ -27,6 +37,9 @@ const SpatialFilters = () => {
 	const [filterSize, setFilterSize] = useState(3);
 	const [sigma, setSigma] = useState(1.0);
 	const [percentile, setPercentile] = useState(50);
+	const [laplacianType, setLaplacianType] = useState<"basic" | "diagonal">(
+		"basic"
+	);
 
 	const originalCanvasRef = useRef<HTMLCanvasElement>(null);
 	const filteredCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -105,6 +118,18 @@ const SpatialFilters = () => {
 				case "order":
 					result = applyOrderFilter(imageData, filterSize, percentile);
 					break;
+				case "prewitt":
+					result = applyPrewittFilter(imageData);
+					break;
+				case "sobel":
+					result = applySobelFilter(imageData);
+					break;
+				case "laplacian":
+					result = applyLaplacianFilter(imageData, laplacianType);
+					break;
+				default:
+					result = imageData;
+					break;
 			}
 
 			setFilteredImageData(result);
@@ -117,7 +142,7 @@ const SpatialFilters = () => {
 		if (originalImageData) {
 			applyFilter();
 		}
-	}, [filterType, filterSize, sigma, percentile]);
+	}, [filterType, filterSize, sigma, percentile, laplacianType]);
 
 	useEffect(() => {
 		if (originalImageData && originalCanvasRef.current) {
@@ -159,6 +184,21 @@ const SpatialFilters = () => {
 			title: "Filtro de Ordem",
 			description:
 				"Ordena os pixels da vizinhança e seleciona um valor específico. Percentil 0 é o mínimo, 50 é a mediana, 100 é o máximo.",
+		},
+		prewitt: {
+			title: "Filtro Prewitt",
+			description:
+				"Detecta bordas usando máscaras de primeira derivada. Boa para bordas com gradientes suaves. Converte automaticamente para escala de cinza.",
+		},
+		sobel: {
+			title: "Filtro Sobel",
+			description:
+				"Detecta bordas com máscaras ponderadas. Mais resistente a ruído que Prewitt devido aos pesos centrais. Converte automaticamente para escala de cinza.",
+		},
+		laplacian: {
+			title: "Filtro Laplaciano",
+			description:
+				"Detecta bordas usando segunda derivada. Sensível a ruído mas detecta bordas finas. Escolha entre kernel básico ou diagonal.",
 		},
 	};
 
@@ -217,11 +257,14 @@ const SpatialFilters = () => {
 								defaultValue="mean"
 								onValueChange={(value) => setFilterType(value as FilterType)}
 							>
-								<TabsList className="grid grid-cols-4 mb-6">
+								<TabsList className="grid grid-cols-7 mb-6">
 									<TabsTrigger value="mean">Média</TabsTrigger>
 									<TabsTrigger value="median">Mediana</TabsTrigger>
 									<TabsTrigger value="gaussian">Gaussiano</TabsTrigger>
 									<TabsTrigger value="order">Ordem</TabsTrigger>
+									<TabsTrigger value="prewitt">Prewitt</TabsTrigger>
+									<TabsTrigger value="sobel">Sobel</TabsTrigger>
+									<TabsTrigger value="laplacian">Laplaciano</TabsTrigger>
 								</TabsList>
 
 								<TabsContent value="mean" className="space-y-6">
@@ -364,6 +407,59 @@ const SpatialFilters = () => {
 										<div className="flex justify-between text-xs text-muted-foreground">
 											<span>Mínimo (0%)</span>
 											<span>Máximo (100%)</span>
+										</div>
+									</div>
+								</TabsContent>
+
+								<TabsContent value="prewitt" className="space-y-6">
+									<div className="bg-slate-50 p-4 rounded-lg dark:bg-slate-900">
+										<h3 className="font-medium mb-2 text-sm">
+											{filterInfo.prewitt.title}
+										</h3>
+										<p className="text-sm text-muted-foreground">
+											{filterInfo.prewitt.description}
+										</p>
+									</div>
+								</TabsContent>
+
+								<TabsContent value="sobel" className="space-y-6">
+									<div className="bg-slate-50 p-4 rounded-lg dark:bg-slate-900">
+										<h3 className="font-medium mb-2 text-sm">
+											{filterInfo.sobel.title}
+										</h3>
+										<p className="text-sm text-muted-foreground">
+											{filterInfo.sobel.description}
+										</p>
+									</div>
+								</TabsContent>
+
+								<TabsContent value="laplacian" className="space-y-6">
+									<div className="bg-slate-50 p-4 rounded-lg dark:bg-slate-900">
+										<h3 className="font-medium mb-2 text-sm">
+											{filterInfo.laplacian.title}
+										</h3>
+										<p className="text-sm text-muted-foreground">
+											{filterInfo.laplacian.description}
+										</p>
+									</div>
+
+									<div className="space-y-2">
+										<Label className="text-sm">
+											Tipo de Kernel:{" "}
+											{laplacianType === "basic" ? "Básico" : "Diagonal"}
+										</Label>
+										<Slider
+											min={0}
+											max={1}
+											step={1}
+											value={[laplacianType === "basic" ? 0 : 1]}
+											onValueChange={([value]) =>
+												setLaplacianType(value === 0 ? "basic" : "diagonal")
+											}
+										/>
+										<div className="flex justify-between text-xs text-muted-foreground">
+											<span>Básico</span>
+											<span>Diagonal</span>
 										</div>
 									</div>
 								</TabsContent>
