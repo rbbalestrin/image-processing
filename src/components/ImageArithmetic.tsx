@@ -16,13 +16,13 @@ import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-	loadImageFromFile,
 	addValue,
 	subtractValue,
 	multiplyValue,
 	divideValue,
 	powerValue,
 } from "../utils/imageArithmetic";
+import { loadImageFromFile } from "../utils/fileConverter";
 
 type OperationType = "add" | "subtract" | "multiply" | "divide" | "power";
 

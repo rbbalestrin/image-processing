@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { convertToGrayscale } from "../utils/imageProcessing";
+import { convertToGrayscale } from "../utils/fileConverter";
 import { equalizeHistogram } from "../utils/histogramEqualization";
 import { BarChart, ArrowLeft, Upload, RefreshCw } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

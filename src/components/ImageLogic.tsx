@@ -21,7 +21,7 @@ import {
 	xorImages,
 	notImage,
 } from "../utils/logicOps";
-import { loadImageFromFile } from "../utils/imageArithmetic";
+import { loadImageFromFile } from "../utils/fileConverter";
 
 type LogicOperationType = "binarize" | "and" | "or" | "xor" | "not";
 

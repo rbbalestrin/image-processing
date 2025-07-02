@@ -11,6 +11,7 @@ import {
 	closing,
 	contour,
 } from "../utils/morphologicalOps";
+import { loadImageFromFile } from "../utils/fileConverter";
 import {
 	ArrowLeft,
 	Upload,
@@ -56,8 +57,8 @@ const MorphologicalOps = () => {
 		setIsProcessing(true);
 
 		try {
-			// Carregar a imagem original
-			const originalData = await loadImage(file);
+			// Carregar a imagem original (com conversão automática de TIFF para JPG)
+			const originalData = await loadImageFromFile(file);
 			setOriginalImageData(originalData);
 
 			// Converter para binário com threshold
@@ -71,37 +72,6 @@ const MorphologicalOps = () => {
 			alert("Erro no arquivo da imagem. Por favor tente outro arquivo");
 		}
 		setIsProcessing(false);
-	};
-
-	const loadImage = (imageFile: File): Promise<ImageData> => {
-		return new Promise((resolve, reject) => {
-			const img = new Image();
-			const canvas = document.createElement("canvas");
-			const ctx = canvas.getContext("2d");
-
-			if (!ctx) {
-				reject(new Error("Não foi possível obter o contexto do canvas"));
-				return;
-			}
-
-			img.onload = () => {
-				canvas.width = img.width;
-				canvas.height = img.height;
-
-				// Desenha a imagem original
-				ctx.drawImage(img, 0, 0);
-
-				// Obtém os dados da imagem
-				const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-				resolve(imageData);
-			};
-
-			img.onerror = () => {
-				reject(new Error("Falha ao carregar imagem"));
-			};
-
-			img.src = URL.createObjectURL(imageFile);
-		});
 	};
 
 	const getKernel = (type: KernelType, size: number): boolean[][] => {

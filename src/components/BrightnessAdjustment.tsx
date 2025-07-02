@@ -1,9 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import {
-	convertToGrayscale,
-	adjustImageBrightness,
-} from "../utils/imageProcessing";
+import { adjustImageBrightness } from "../utils/imageProcessing";
+import { convertToGrayscale } from "../utils/fileConverter";
 import { Sun, ArrowLeft, Upload, RefreshCw } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
