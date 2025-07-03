@@ -74,7 +74,9 @@ export function applyMedianFilter(
 ): ImageData {
 	const { data, width, height } = imageData;
 	const newData = new Uint8ClampedArray(data);
-	const medianIdx = Math.floor((size * size) / 2);
+	const windowSize = size * size;
+	// Para mediana, usamos o elemento central (50% dos elementos)
+	const medianIdx = Math.floor((windowSize - 1) / 2);
 
 	for (let y = 0; y < height; y++) {
 		for (let x = 0; x < width; x++) {
