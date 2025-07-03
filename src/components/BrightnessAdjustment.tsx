@@ -1,10 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { adjustImageBrightness } from "../utils/imageProcessing";
-import {
-	loadImageFile,
-	convertToGrayscaleImageData,
-} from "../utils/tiffConverter";
+import { loadImageFile } from "../utils/tiffConverter";
 import { Sun, ArrowLeft, Upload, RefreshCw } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -31,11 +28,10 @@ const BrightnessAdjustment = () => {
 		setIsProcessing(true);
 
 		try {
-			// Carrega a imagem (incluindo TIFF) e converte para escala de cinza
+			// Carrega a imagem (incluindo TIFF e BMP)
 			const imageData = await loadImageFile(file);
-			const grayscaleData = convertToGrayscaleImageData(imageData);
-			setOriginalImageData(grayscaleData);
-			setAdjustedImageData(grayscaleData);
+			setOriginalImageData(imageData);
+			setAdjustedImageData(imageData);
 			setBrightness(0);
 		} catch (error) {
 			console.log("Error processing image:", error);
@@ -82,11 +78,10 @@ const BrightnessAdjustment = () => {
 								<ArrowLeft className="h-4 w-4" />
 							</Link>
 						</Button>
-						<CardTitle>Ajuste de Brilho (Escala de Cinza)</CardTitle>
+						<CardTitle>Ajuste de Brilho</CardTitle>
 					</div>
 					<p className="text-s text-muted-foreground">
-						A imagem será convertida para escala de cinza antes de ser
-						processada
+						Ajuste o brilho de imagens coloridas ou em escala de cinza
 					</p>
 				</CardHeader>
 				<CardContent>

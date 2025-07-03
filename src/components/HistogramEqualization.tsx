@@ -128,8 +128,7 @@ const HistogramEqualization = () => {
 						<CardTitle>Equalização de Histograma (Escala de Cinza)</CardTitle>
 					</div>
 					<p className="text-s text-muted-foreground">
-						A imagem será convertida para escala de cinza antes de ser
-						processada
+						A equalização de histograma requer conversão para escala de cinza
 					</p>
 				</CardHeader>
 				<CardContent>
