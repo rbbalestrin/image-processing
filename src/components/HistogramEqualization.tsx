@@ -1,7 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { convertToGrayscale } from "../utils/fileConverter";
 import { equalizeHistogram } from "../utils/histogramEqualization";
+import {
+	loadImageFile,
+	convertToGrayscaleImageData,
+} from "../utils/tiffConverter";
 import { BarChart, ArrowLeft, Upload, RefreshCw } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -27,7 +30,9 @@ const HistogramEqualization = () => {
 		setIsProcessing(true);
 
 		try {
-			const grayscaleData = await convertToGrayscale(file);
+			// Carrega a imagem (incluindo TIFF) e converte para escala de cinza
+			const imageData = await loadImageFile(file);
+			const grayscaleData = convertToGrayscaleImageData(imageData);
 			setOriginalImageData(grayscaleData);
 
 			// Aplicar equalização de histograma
@@ -137,14 +142,14 @@ const HistogramEqualization = () => {
 									Clique para selecionar uma imagem
 								</p>
 								<p className="text-xs text-muted-foreground mt-1">
-									PNG, JPG, GIF, TIF, TIFF até 10MB
+									PNG, JPG, GIF, TIF, TIFF, BMP até 10MB
 								</p>
 							</div>
 							<input
 								id="image-upload"
 								type="file"
 								className="hidden"
-								accept="image/png,image/jpeg,image/gif,image/tiff"
+								accept="image/png,image/jpeg,image/gif,image/tiff,image/bmp"
 								onChange={handleFileUpload}
 								disabled={isProcessing}
 							/>

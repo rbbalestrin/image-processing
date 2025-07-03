@@ -9,7 +9,7 @@ import {
 	applySobelFilter,
 	applyLaplacianFilter,
 } from "../utils/spatialFilters";
-import { loadImageFromFile } from "../utils/fileConverter";
+import { loadImageFile } from "../utils/tiffConverter";
 import { ArrowLeft, Upload, RefreshCw, Filter } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -53,8 +53,8 @@ const SpatialFilters = () => {
 		setIsProcessing(true);
 
 		try {
-			// Carregar a imagem original (com conversão automática de TIFF para JPG)
-			const originalData = await loadImageFromFile(file);
+			// Carregar a imagem original (suporta TIFF automaticamente)
+			const originalData = await loadImageFile(file);
 			setOriginalImageData(originalData);
 
 			// Aplicar o filtro inicial
@@ -198,14 +198,14 @@ const SpatialFilters = () => {
 									Clique para selecionar uma imagem
 								</p>
 								<p className="text-xs text-muted-foreground mt-1">
-									PNG, JPG, GIF, TIF, TIFF até 10MB
+									PNG, JPG, GIF, TIF, TIFF, BMP até 10MB
 								</p>
 							</div>
 							<input
 								id="image-upload"
 								type="file"
 								className="hidden"
-								accept="image/png,image/jpeg,image/gif,image/tiff"
+								accept="image/png,image/jpeg,image/gif,image/tiff,image/bmp"
 								onChange={handleFileUpload}
 								disabled={isProcessing}
 							/>

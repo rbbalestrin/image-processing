@@ -22,7 +22,7 @@ import {
 	divideValue,
 	powerValue,
 } from "../utils/imageArithmetic";
-import { loadImageFromFile } from "../utils/fileConverter";
+import { loadImageFile } from "../utils/tiffConverter";
 
 type OperationType = "add" | "subtract" | "multiply" | "divide" | "power";
 
@@ -48,7 +48,7 @@ const ImageArithmetic = () => {
 		setIsProcessing(true);
 
 		try {
-			const imageData = await loadImageFromFile(file);
+			const imageData = await loadImageFile(file);
 			setImageData(imageData);
 			setImageName(file.name);
 			processImage(imageData, operation, value);
@@ -214,7 +214,7 @@ const ImageArithmetic = () => {
 								id="image-upload"
 								type="file"
 								className="hidden"
-								accept="image/png,image/jpeg,image/gif,image/tiff"
+								accept="image/png,image/jpeg,image/gif,image/tiff,image/bmp"
 								onChange={handleImageUpload}
 								disabled={isProcessing}
 							/>

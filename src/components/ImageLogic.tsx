@@ -21,7 +21,7 @@ import {
 	xorImages,
 	notImage,
 } from "../utils/logicOps";
-import { loadImageFromFile } from "../utils/fileConverter";
+import { loadImageFile } from "../utils/tiffConverter";
 
 type LogicOperationType = "binarize" | "and" | "or" | "xor" | "not";
 
@@ -50,7 +50,7 @@ const ImageLogic = () => {
 		setIsProcessing(true);
 
 		try {
-			const imageData = await loadImageFromFile(file);
+			const imageData = await loadImageFile(file);
 			setImage1Data(imageData);
 			setImage1Name(file.name);
 
@@ -86,7 +86,7 @@ const ImageLogic = () => {
 		setIsProcessing(true);
 
 		try {
-			const imageData = await loadImageFromFile(file);
+			const imageData = await loadImageFile(file);
 			setImage2Data(imageData);
 			setImage2Name(file.name);
 
@@ -264,6 +264,7 @@ const ImageLogic = () => {
 									id="image1-upload"
 									type="file"
 									className="hidden"
+									accept="image/png,image/jpeg,image/gif,image/tiff,image/bmp"
 									onChange={handleImage1Upload}
 									disabled={isProcessing}
 								/>
@@ -289,7 +290,7 @@ const ImageLogic = () => {
 									id="image2-upload"
 									type="file"
 									className="hidden"
-									accept="image/png,image/jpeg,image/gif,image/tiff"
+									accept="image/png,image/jpeg,image/gif,image/tiff,image/bmp"
 									onChange={handleImage2Upload}
 									disabled={isProcessing}
 								/>

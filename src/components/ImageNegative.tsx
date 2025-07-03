@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { convertToNegative } from "../utils/negative";
-import { loadImageFromFile } from "../utils/fileConverter";
+import { loadImageFile } from "../utils/tiffConverter";
 import { ArrowLeft, Upload, RefreshCw, Contrast } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -26,8 +26,8 @@ const ImageNegative = () => {
 		setIsProcessing(true);
 
 		try {
-			// Carregar a imagem original (com conversão automática de TIFF para JPG)
-			const originalData = await loadImageFromFile(file);
+			// Carregar a imagem original (incluindo TIFF)
+			const originalData = await loadImageFile(file);
 			setOriginalImageData(originalData);
 
 			// Aplicar o negativo
@@ -87,14 +87,14 @@ const ImageNegative = () => {
 									Clique para selecionar uma imagem
 								</p>
 								<p className="text-xs text-muted-foreground mt-1">
-									PNG, JPG, GIF, TIF, TIFF até 10MB
+									PNG, JPG, GIF, TIF, TIFF, BMP até 10MB
 								</p>
 							</div>
 							<input
 								id="image-upload"
 								type="file"
 								className="hidden"
-								accept="image/png,image/jpeg,image/gif,image/tiff"
+								accept="image/png,image/jpeg,image/gif,image/tiff,image/bmp"
 								onChange={handleFileUpload}
 								disabled={isProcessing}
 							/>

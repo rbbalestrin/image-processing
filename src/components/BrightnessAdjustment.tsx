@@ -1,7 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { adjustImageBrightness } from "../utils/imageProcessing";
-import { convertToGrayscale } from "../utils/fileConverter";
+import {
+	loadImageFile,
+	convertToGrayscaleImageData,
+} from "../utils/tiffConverter";
 import { Sun, ArrowLeft, Upload, RefreshCw } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -28,7 +31,9 @@ const BrightnessAdjustment = () => {
 		setIsProcessing(true);
 
 		try {
-			const grayscaleData = await convertToGrayscale(file);
+			// Carrega a imagem (incluindo TIFF) e converte para escala de cinza
+			const imageData = await loadImageFile(file);
+			const grayscaleData = convertToGrayscaleImageData(imageData);
 			setOriginalImageData(grayscaleData);
 			setAdjustedImageData(grayscaleData);
 			setBrightness(0);
@@ -94,14 +99,14 @@ const BrightnessAdjustment = () => {
 									Clique para selecionar uma imagem
 								</p>
 								<p className="text-xs text-muted-foreground mt-1">
-									PNG, JPG, GIF, TIF, TIFF até 10MB
+									PNG, JPG, GIF, TIF, TIFF, BMP até 10MB
 								</p>
 							</div>
 							<input
 								id="image-upload"
 								type="file"
 								className="hidden"
-								accept="image/png,image/jpeg,image/gif,image/tiff"
+								accept="image/png,image/jpeg,image/gif,image/tiff,image/bmp"
 								onChange={handleFileUpload}
 								disabled={isProcessing}
 							/>
